@@ -19,5 +19,8 @@
 #define HOLD_ON_OTHER_KEY_PRESS false
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
+// 高速タイプ中は hold を無効化する（直前のキーから150ms以内なら必ず tap）
+#define FLOW_TAP_TERM 150
+
 #define TAPPING_FORCE_HOLD true
 #define TAPPING_FORCE_HOLD_PER_KEY

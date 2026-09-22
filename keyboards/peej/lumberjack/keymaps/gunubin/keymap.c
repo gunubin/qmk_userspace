@@ -182,6 +182,23 @@ void housekeeping_task_user(void) {
 
 // タッピングターム: キーを押してからホールドと判定されるまでの時間（ミリ秒）
 // 値が小さいほど素早くホールド判定される。タップ入力には素早い指離しが必要になる
+// Flow Tap: 直前のキーから FLOW_TAP_TERM ms 以内に押された mod-tap は必ず tap にする。
+// 既定リストにある KC_SPC は除外（A_SPC は親指で意図的に hold するため）。
+bool is_flow_tap_key(uint16_t keycode) {
+    if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
+        return false; // ホットキー操作中は無効
+    }
+    switch (get_tap_keycode(keycode)) {
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
+    }
+    return false;
+}
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case S_SLSH:
