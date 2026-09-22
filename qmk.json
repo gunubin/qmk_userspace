@@ -3,6 +3,7 @@
     "build_targets": [
         ["gunubin/cornelius", "gunubin"],
         ["peej/lumberjack", "gunubin"],
-        ["crkbd/rev4_1/standard", "gunubin"]
+        ["crkbd/rev4_1/standard", "gunubin"],
+        ["gunubin/duo", "gunubin"]
     ]
 }
