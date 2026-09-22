@@ -1,0 +1,47 @@
+name: Build QMK firmware
+
+on: [push, workflow_dispatch]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/qmk/qmk_cli
+
+    steps:
+      - name: Checkout userspace
+        uses: actions/checkout@v4
+        with:
+          path: userspace
+
+      - name: Checkout qmk_firmware
+        uses: actions/checkout@v4
+        with:
+          repository: qmk/qmk_firmware
+          ref: master
+          path: qmk_firmware
+          submodules: recursive
+
+      # upstream に存在しないキーボード定義(gunubin/cornelius)を見せる
+      - name: Link external keyboard definitions
+        run: ln -sfn "$GITHUB_WORKSPACE/userspace/keyboards_ext/gunubin" "$GITHUB_WORKSPACE/qmk_firmware/keyboards/gunubin"
+
+      - name: Configure qmk
+        run: |
+          qmk config user.qmk_home="$GITHUB_WORKSPACE/qmk_firmware"
+          qmk config user.overlay_dir="$GITHUB_WORKSPACE/userspace"
+
+      - name: Build
+        working-directory: userspace
+        run: qmk userspace-compile
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: |
+            userspace/*.hex
+            userspace/*.bin
+            userspace/*.uf2
