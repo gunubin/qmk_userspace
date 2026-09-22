@@ -48,6 +48,40 @@ qmk compile -kb gunubin/cornelius -km gunubin   # 個別
 
 成果物はこのディレクトリ直下に `*.uf2` / `*.hex` として出力される。
 
+## フラッシュ
+
+`qmk flash` はビルドしてからブートローダー状態のデバイスを待ち受ける。
+先にコマンドを実行してから、キーボードをブートローダーに入れる方がやりやすい。
+
+```bash
+qmk flash -kb gunubin/cornelius -km gunubin
+qmk flash -kb peej/lumberjack  -km gunubin
+```
+
+### ブートローダーへの入り方
+
+どのキーマップにも `QK_BOOT` を割り当てていないため、キー操作では入れない。物理的な操作が必要。
+
+| キーボード | MCU / bootloader | 入り方 |
+|---|---|---|
+| `gunubin/cornelius` | RP2040 / rp2040 | 左上キー（matrix `[0,0]`）を押しながら USB を挿す。または基板の BOOTSEL ボタンを押しながら挿す |
+| `peej/lumberjack` | atmega328p / usbasploader | 基板側のブートジャンパ／ボタンを操作しながら挿す（[hsgw/USBaspLoader](https://github.com/hsgw/USBaspLoader/tree/plaid) 仕様。具体的な位置は自分の基板で確認） |
+
+cornelius は左上キー押しながら挿すと `RPI-RP2` という USB ドライブとしてマウントされる。
+この状態なら `qmk flash` を使わず、ビルド済みの `.uf2` をドラッグするだけでもよい。
+
+```bash
+qmk userspace-compile
+cp gunubin_cornelius_gunubin.uf2 /Volumes/RPI-RP2/
+```
+
+lumberjack は usbasploader なので avrdude 経由になる。`qmk flash` に任せるのが確実。
+
+### 補足: リセットキーを付けておくと楽
+
+ブートローダー用の物理操作が面倒なら、キーマップの空きキーに `QK_BOOT` を割り当てておくと
+そのキーだけでブートローダーに入れる。現状はどのキーマップにも入っていない。
+
 ## ビルドターゲットの追加
 
 ```bash
