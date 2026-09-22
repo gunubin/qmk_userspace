@@ -50,37 +50,57 @@ qmk compile -kb gunubin/cornelius -km gunubin   # 個別
 
 ## フラッシュ
 
+```bash
+qmk flash -kb crkbd/rev4_1/standard -km gunubin
+qmk flash -kb gunubin/cornelius     -km gunubin
+qmk flash -kb peej/lumberjack       -km gunubin
+```
+
 `qmk flash` はビルドしてからブートローダー状態のデバイスを待ち受ける。
 先にコマンドを実行してから、キーボードをブートローダーに入れる方がやりやすい。
 
-```bash
-qmk flash -kb gunubin/cornelius -km gunubin
-qmk flash -kb peej/lumberjack  -km gunubin
-```
-
 ### ブートローダーへの入り方
 
-どのキーマップにも `QK_BOOT` を割り当てていないため、キー操作では入れない。物理的な操作が必要。
+`_NUMBER` レイヤーの **B の位置**に `QK_BOOT` を割り当ててある（3機種とも同じ物理位置）。
+
+```
+右親指の L2_DEL を押しながら、左手人差し指で B
+```
+
+```
+_NUMBER レイヤー
+
+  crkbd / cornelius          lumberjack
+   1 2 3 4 5 | 6 7 8 9 0      ! @ # $ % | ^ & * ( )
+   . . . . . | . . . . .      1 2 3 4 5 | 6 7 8 9 0
+   . . . .[B]| . . . . .      . . . . . | . . . . .
+                              . . . .[B]| . . . . .
+
+  [B] = QK_BOOT
+```
+
+レイヤー2は左親指の `LM_NUM` でも入れるが、そちらは `MOD_LGUI` が同時に乗る（`QK_BOOT` は
+修飾キーの影響を受けないので動作はする）。`L2_DEL` を使えば両手操作になり誤爆しにくい。
+
+### 物理的に入る方法（ファームが壊れて QK_BOOT が効かないとき）
 
 | キーボード | MCU / bootloader | 入り方 |
 |---|---|---|
-| `gunubin/cornelius` | RP2040 / rp2040 | 左上キー（matrix `[0,0]`）を押しながら USB を挿す。または基板の BOOTSEL ボタンを押しながら挿す |
-| `peej/lumberjack` | atmega328p / usbasploader | 基板側のブートジャンパ／ボタンを操作しながら挿す（[hsgw/USBaspLoader](https://github.com/hsgw/USBaspLoader/tree/plaid) 仕様。具体的な位置は自分の基板で確認） |
+| `crkbd/rev4_1/standard` | RP2040 / rp2040 | 基板の BOOTSEL ボタンを押しながら USB を挿す |
+| `gunubin/cornelius` | RP2040 / rp2040 | 左上キー（matrix `[0,0]`）を押しながら挿す。または BOOTSEL ボタン |
+| `peej/lumberjack` | atmega328p / usbasploader | 基板側のブートジャンパ／ボタンを操作しながら挿す（[hsgw/USBaspLoader](https://github.com/hsgw/USBaspLoader/tree/plaid) 仕様。位置は自分の基板で確認） |
 
-cornelius は左上キー押しながら挿すと `RPI-RP2` という USB ドライブとしてマウントされる。
-この状態なら `qmk flash` を使わず、ビルド済みの `.uf2` をドラッグするだけでもよい。
+RP2040 の2機種はブートローダーに入ると `RPI-RP2` という USB ドライブとしてマウントされる。
+この状態なら `qmk flash` を使わずビルド済みの `.uf2` をドラッグするだけでもよい。
 
 ```bash
 qmk userspace-compile
 cp gunubin_cornelius_gunubin.uf2 /Volumes/RPI-RP2/
 ```
 
+crkbd は分割キーボードなので、**左右それぞれをブートローダーに入れて2回フラッシュする**。
+
 lumberjack は usbasploader なので avrdude 経由になる。`qmk flash` に任せるのが確実。
-
-### 補足: リセットキーを付けておくと楽
-
-ブートローダー用の物理操作が面倒なら、キーマップの空きキーに `QK_BOOT` を割り当てておくと
-そのキーだけでブートローダーに入れる。現状はどのキーマップにも入っていない。
 
 ## ビルドターゲットの追加
 
@@ -88,7 +108,7 @@ lumberjack は usbasploader なので avrdude 経由になる。`qmk flash` に�
 qmk userspace-add -kb crkbd/rev1 -km gunubin
 ```
 
-crkbd はキーマップだけ置いてあり、ビルドターゲット未登録。使うリビジョンが決まったら上記で追加する。
+crkbd は `rev4_1/standard`（Corne v4 / RP2040）。過去のフラッシュ履歴から確定した。
 
 ## upstream 追従
 

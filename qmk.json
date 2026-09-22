@@ -2,6 +2,7 @@
     "userspace_version": "1.1",
     "build_targets": [
         ["gunubin/cornelius", "gunubin"],
-        ["peej/lumberjack", "gunubin"]
+        ["peej/lumberjack", "gunubin"],
+        ["crkbd/rev4_1/standard", "gunubin"]
     ]
 }
