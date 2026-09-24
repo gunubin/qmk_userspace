@@ -108,8 +108,10 @@ lumberjack は usbasploader なので avrdude 経由になる。`qmk flash` に�
 ### duo の初回フラッシュ
 
 まだ自分のファームを入れていない状態では `QK_BOOT` も Bootmagic も自分の設定ではないので、
-出荷時ファーム側の手段を使う。duo の公式キーマップ（LAZYDESIGNERS 製 vial keymap）には
+出荷時ファーム側の手段を使う。duo の出荷時ファーム（LAZYDESIGNERS 製 vial keymap）には
 レイヤー1の **2段目左端（レイヤー0 では Tab）** に `QK_BOOT` がある。
+
+**この手順で DFU に入れることを実機で確認済み（2026-09-24）。**
 
 ```
 左の 2u キー（Space / LT(1, KC_SPC)）を押しながら、2段目の左端キー
@@ -124,7 +126,8 @@ duo レイヤー0 最下段（9キー）
                            ↑これを押しながら Tab の位置
 ```
 
-出荷時ファームがこの通りでない場合は、readme が指定する物理手段になる。
+出荷時ファームを書き換えてしまった場合など、上記が使えないときは readme が指定する
+物理手段になる（未検証）。
 
 > **Reset Key:** To enter the bootloader, press the boot button and short the reset pads
 > together on the PCB. — vial-qmk `keyboards/lazydesigners/duo/readme.md`
