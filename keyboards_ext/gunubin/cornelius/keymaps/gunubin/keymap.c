@@ -23,8 +23,8 @@ enum layers {
   _NUMBER
 };
 
-#define A_SPC LGUI_T(KC_SPC)
-#define G_TAB LALT_T(KC_TAB)
+#define G_SPC LGUI_T(KC_SPC)  // 単押し Space / 長押し Cmd
+#define A_TAB LALT_T(KC_TAB)  // 単押し Tab   / 長押し Option
 
 #define A_BSPC RALT_T(KC_BSPC)
 #define L1_BSPC LT(1, KC_BSPC)
@@ -82,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______,
       _______, C_A,     KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    C_ENT,   _______,
       _______, S_Z,     KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  S_SLSH,  _______,
-      _______, _______, _______,  G_TAB,   A_SPC,   LM_NUM,  KC_RSFT, L1_BSPC, L2_DEL, _______,   _______, _______
+      _______, _______, _______,  A_TAB,   G_SPC,   LM_NUM,  KC_RSFT, L1_BSPC, L2_DEL, _______,   _______, _______
     ),
 
     [_FUNCTION] = LAYOUT(
@@ -125,7 +125,7 @@ void housekeeping_task_user(void) {
 }
 
 // Flow Tap: 直前のキーから FLOW_TAP_TERM ms 以内に押された mod-tap は必ず tap にする。
-// 既定リストにある KC_SPC は除外（A_SPC は親指で意図的に hold するため）。
+// 既定リストにある KC_SPC は除外（G_SPC は親指で意図的に hold するため）。
 bool is_flow_tap_key(uint16_t keycode) {
     if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
         return false; // ホットキー操作中は無効
@@ -168,8 +168,8 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:
@@ -181,8 +181,8 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:
@@ -194,8 +194,8 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:

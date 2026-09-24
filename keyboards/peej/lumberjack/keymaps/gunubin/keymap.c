@@ -24,9 +24,8 @@ enum layers {
   _NUMBER,
 };
 
-// 謎の不具合でlguiとlaltが入れ替わった!?
-#define A_SPC LALT_T(KC_SPC)
-#define G_TAB LGUI_T(KC_TAB)
+#define G_SPC LGUI_T(KC_SPC)  // 単押し Space / 長押し Cmd
+#define A_TAB LALT_T(KC_TAB)  // 単押し Tab   / 長押し Option
 
 #define A_BSPC RALT_T(KC_BSPC)
 #define L1_BSPC LT(1, KC_BSPC)
@@ -90,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------| |------+------+------+------+------+------|
  * | S_Z  |  X   |  C   |  V   |  B   |      | |      |  N   |  M   |  ,   |  .   |S_SLSH|
  * |------+------+------+------+------+------| |------+------+------+------+------+------|
- * |      | LALT |G_TAB |A_SPC |      | SPC  | |A_BSPC|     |L1_BSPC| OSM_LSFT|   |      |
+ * |      | LALT |A_TAB |G_SPC |      | SPC  | |A_BSPC|     |L1_BSPC| OSM_LSFT|   |      |
  * `-----------------------------------------' `-----------------------------------------'
  */
  [_QWERTY] = LAYOUT_ortho_5x12(
@@ -98,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, _______, _______, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
     C_A,     KC_S,    KC_D,    KC_F,    KC_G, _______, _______, KC_H,    KC_J,    KC_K,    KC_L,    C_ENT,
     S_Z,     KC_X,    KC_C,    KC_V,    KC_B, _______, _______, KC_N,    KC_M, KC_COMM,   KC_DOT,   S_SLSH,
-    _______,_______, G_TAB,   A_SPC, _______,  LM_NUM, KC_RSFT,_______, L1_BSPC,   L2_DEL,  _______,  _______
+    _______,_______, A_TAB,   G_SPC, _______,  LM_NUM, KC_RSFT,_______, L1_BSPC,   L2_DEL,  _______,  _______
 ),
 
 /* Function レイヤー
@@ -183,7 +182,7 @@ void housekeeping_task_user(void) {
 // タッピングターム: キーを押してからホールドと判定されるまでの時間（ミリ秒）
 // 値が小さいほど素早くホールド判定される。タップ入力には素早い指離しが必要になる
 // Flow Tap: 直前のキーから FLOW_TAP_TERM ms 以内に押された mod-tap は必ず tap にする。
-// 既定リストにある KC_SPC は除外（A_SPC は親指で意図的に hold するため）。
+// 既定リストにある KC_SPC は除外（G_SPC は親指で意図的に hold するため）。
 bool is_flow_tap_key(uint16_t keycode) {
     if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
         return false; // ホットキー操作中は無効
@@ -231,8 +230,8 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 // false の場合、タッピングターム経過を待ってからホールド判定する
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:
@@ -247,8 +246,8 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 // レイヤーキーなど、素早い修飾が必要な場合に有効
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:
@@ -263,8 +262,8 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 // BSPCなど連打したいキーは false が便利
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case A_SPC:
-        case G_TAB:
+        case G_SPC:
+        case A_TAB:
         case A_BSPC:
         case L1_BSPC:
 //         case S_SLSH:
