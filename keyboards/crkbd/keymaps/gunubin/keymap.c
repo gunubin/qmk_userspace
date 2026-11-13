@@ -89,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_GRV,  KC_TILD, _______,
       _______, KC_PLUS, LSFT(KC_9), KC_LBRC, KC_MINS, KC_EQL, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT, KC_SCLN, _______,
       _______, KC_DQT,  KC_LCBR, LSFT(KC_COMM), KC_QUOT, KC_UNDS, KC_PIPE, KC_UNDS, LSFT(KC_COMM), LSFT(KC_DOT), KC_BSLS, _______,
-                         KC_LGUI, KC_LALT, _______, _______, KC_SPC,  _______
+                         KC_LGUI, KC_LALT, KC_ESC , _______, KC_SPC,  _______
     ),
 
     [_NUMBER] = LAYOUT_split_3x6_3(
@@ -172,7 +172,11 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
         case A_TAB:
         case A_BSPC:
         case L1_BSPC:
-//         case S_SLSH:
+        // 小指の Shift は、押したまま次のキーを押して離しても Shift にしない。
+        // 速く打つと z を離すのが次の文字より遅れ「ずっと→Utto」になるため。
+        // Shift にするのは TAPPING_TERM（180ms）以上押したときだけ。
+        case S_Z:
+        case S_SLSH:
             return false;
         default:
            return PERMISSIVE_HOLD;
