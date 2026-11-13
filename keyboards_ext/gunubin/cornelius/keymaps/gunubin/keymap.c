@@ -172,7 +172,11 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
         case A_TAB:
         case A_BSPC:
         case L1_BSPC:
-//         case S_SLSH:
+        // 小指の Shift は、押したまま次のキーを押して離しても Shift にしない。
+        // 速く打つと z を離すのが次の文字より遅れ「ずっと→Utto」になるため。
+        // Shift にするのは TAPPING_TERM（180ms）以上押したときだけ。
+        case S_Z:
+        case S_SLSH:
             return false;
         default:
            return PERMISSIVE_HOLD;
